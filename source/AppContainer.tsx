@@ -1,17 +1,12 @@
-import * as React from 'react';
-import { Text, View, Linking } from 'react-native';
+import React from 'react';
+import {View} from 'react-native';
+import Navigator from './Navigator';
 import Theme from './Theme';
-import GithubComponent from './githubgraphql/GithubComponent';
-
-const url = 'https://www.robinwieruch.de/react-graphql-apollo-tutorial/';
 
 const AppContainer = () => (
-  <View style={[Theme.container, { marginTop: 30 }]}>
-    <Text style={Theme.title}>React Native with Apollo for GraphQL</Text>
-    <Text style={Theme.link} onPress={() => Linking.openURL(url)}>{url}</Text>
-    <Text style={Theme.para}>Shake your phone to open the developer menu.</Text>
-    <GithubComponent />
-  </View>
+    <View style={Theme.container}>
+        <Navigator />
+    </View>
 );
 
 export default AppContainer;
