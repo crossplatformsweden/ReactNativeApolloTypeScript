@@ -1,0 +1,8 @@
+ /* .gqlconfig - GraphQL */
+ /* Required by the @playlyfe/gql library */
+ /* In turn used by the GraphQL library for VS Code */
+ {
+   schema: {
+     files: 'schemas/**/*.gql'
+   }
+ }

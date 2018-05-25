@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "sdkVersion": "27.0.0",
+    "orientation": "portrait",
+    "primaryColor": "#ffde00",
+    "name": "RN Apollo",
+    "description": "Apollo ReactNative with TypeScript",
+    "version": "0.0.1",
+    "slug": "reactnative-apollo-ts",
+    "assetBundlePatterns": ["resources/**"]
+  },
+  "config": {
+
+  }
+}
