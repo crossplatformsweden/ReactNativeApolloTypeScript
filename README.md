@@ -63,6 +63,9 @@ https://github.com/brysgo/babel-plugin-inline-dotenv
 
 Edit the `.env` file and add your GitHub Personal Access Token
 
+### Cross-Fetch
+Resolves issues with Fetch API in Apollo client
+
 ### React Apollo Snippets
 https://github.com/leveluptuts/React-Apollo-Snippets-for-VSCode
 

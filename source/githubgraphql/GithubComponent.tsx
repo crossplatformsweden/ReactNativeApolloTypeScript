@@ -1,23 +1,28 @@
 import * as React from 'react';
 import { Text, View, TextInput, Button } from 'react-native';
-import axios from 'axios';
 import Theme from '../Theme';
+import 'cross-fetch/polyfill';
+import ApolloBoost, { gql } from 'apollo-boost';
 
 /**
  * Axios adapter for GitHub graphql API
  */
-const axisGitHubGraphQL = axios.create({
-    baseURL: 'https://api.github.com/graphql',
-    headers: {
-        // @ts-ignore
-        Authorization: 'bearer ' + process.env.REACT_APP_GITHUB_PERSONAL_ACCESS_TOKEN,
+const apolloClient = new ApolloBoost({
+    uri: 'https://api.github.com/graphql',
+    request: async (op) => {
+        op.setContext({
+            headers: {
+                // @ts-ignore
+                authorization: 'Bearer ' + process.env.REACT_APP_GITHUB_PERSONAL_ACCESS_TOKEN,
+            },
+        });
     },
 });
 
 /**
  * GraphQL query to get organizations
  */
-const GetOrganizationQuery = (organisation: string, repository: string) => `
+const GetOrganizationQuery = (organisation: string, repository: string) => gql`
 {
     organization(login: "${organisation}") {
         name
@@ -35,17 +40,17 @@ interface IState {
      * Repo to search for
      */
     name?: string;
-    result?: string;
+    data?: any;
     errors?: string;
     repo?: string;
 }
 
-class Github extends React.Component<{}, IState> {
+class GithubComponent extends React.Component<{}, IState> {
     constructor(props: any) {
         super(props);
         this.state = {
             name: 'crossplatformsweden',
-            result: '',
+            data: '',
             repo: 'ReactNativeTypeScript',
         };
         this.onSearch = this.onSearch.bind(this);
@@ -68,20 +73,20 @@ class Github extends React.Component<{}, IState> {
                     <TextInput placeholder='Repository' value={this.state.repo} onChangeText={(val) => this.setState({ repo: val })}></TextInput>
                     <Button title='Search' onPress={() => this.onSearch()} />
                 </View>
-                {this.state.result &&
+                {this.state.data &&
                     // @ts-ignore
-                    this.state.result ? (
+                    this.state.data ? (
                         <View style={Theme.container}>
                             // @ts-ignore
-                            <Text style={Theme.textBlock}>Url: {this.state.result.organization.url}</Text>
+                            <Text style={Theme.textBlock}>Url: {this.state.data.organization.url}</Text>
                             // @ts-ignore
-                            {this.state.result.organization.repository ? (
+                            {this.state.data.organization.repository ? (
                                 // @ts-ignore
-                                <Text style={Theme.textBlock}>Repo: {this.state.result.organization.repository.url}</Text>
+                                <Text style={Theme.textBlock}>Repo: {this.state.data.organization.repository.url}</Text>
                             ) : null}
                         </View>
                     ) : null}
-                            <Text style={{ color: 'red' }}>{this.state.errors}</Text>
+                <Text style={{ color: 'red' }}>{this.state.errors}</Text>
             </View>
         );
     }
@@ -91,12 +96,12 @@ class Github extends React.Component<{}, IState> {
             return;
         }
 
-        const result = await axisGitHubGraphQL.post('', { query: GetOrganizationQuery(this.state.name, this.state.repo) });
-        const data = result.data.data;
-        const errors = result.data.errors;
+        const result = await apolloClient.query({ query: GetOrganizationQuery(this.state.name, this.state.repo) });
+        const data = result.data;
+        const errors = result.errors;
 
-        this.setState({ result: data, errors: errors && errors.length ? errors[0].message : null });
+        this.setState({ data: data, errors: errors && errors.length ? errors[0].message : null });
     }
 }
 
-export default Github;
+export default GithubComponent;
