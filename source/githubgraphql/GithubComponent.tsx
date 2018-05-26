@@ -2,38 +2,22 @@ import * as React from 'react';
 import { Text, View, TextInput, Button } from 'react-native';
 import Theme from '../Theme';
 import 'cross-fetch/polyfill';
-import ApolloBoost, { gql } from 'apollo-boost';
-
-/**
- * Axios adapter for GitHub graphql API
- */
-const apolloClient = new ApolloBoost({
-    uri: 'https://api.github.com/graphql',
-    request: async (op) => {
-        op.setContext({
-            headers: {
-                // @ts-ignore
-                authorization: 'Bearer ' + process.env.REACT_APP_GITHUB_PERSONAL_ACCESS_TOKEN,
-            },
-        });
-    },
-});
 
 /**
  * GraphQL query to get organizations
  */
-const GetOrganizationQuery = (organisation: string, repository: string) => gql`
-{
-    organization(login: "${organisation}") {
-        name
-        url
-        repository(name: "${repository}") @include(if:${repository ? 'true' : false}){
-            name
-            url
-        }
-      }
-}
-`;
+// const GetOrganizationQuery = (organisation: string, repository: string) => gql`
+// {
+//     organization(login: "${organisation}") {
+//         name
+//         url
+//         repository(name: "${repository}") @include(if:${repository ? 'true' : false}){
+//             name
+//             url
+//         }
+//       }
+// }
+// `;
 
 interface IState {
     /**
@@ -96,11 +80,11 @@ class GithubComponent extends React.Component<{}, IState> {
             return;
         }
 
-        const result = await apolloClient.query({ query: GetOrganizationQuery(this.state.name, this.state.repo) });
-        const data = result.data;
-        const errors = result.errors;
+        // const result = await apolloClient.query({ query: GetOrganizationQuery(this.state.name, this.state.repo) });
+        // const data = result.data;
+        // const errors = result.errors;
 
-        this.setState({ data: data, errors: errors && errors.length ? errors[0].message : null });
+        // this.setState({ data: data, errors: errors && errors.length ? errors[0].message : null });
     }
 }
 
