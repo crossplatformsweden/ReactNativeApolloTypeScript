@@ -173,17 +173,17 @@ const Theme = StyleSheet.create({
     marginTop: 5,
     opacity: 1,
   },
-    para: {
-        marginTop: 10,
-    },
-    title: {
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    link: { color: 'blue' },
-    textBlock: {
-        width: 300,
-    },
+  para: {
+    marginTop: 10,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  link: { color: 'blue' },
+  textBlock: {
+    width: 300,
+  },
 });
 
 export default Theme;

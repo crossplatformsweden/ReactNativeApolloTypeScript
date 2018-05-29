@@ -6,6 +6,10 @@ import { ApolloProvider } from 'react-apollo';
 import { View } from 'react-native';
 import Theme from '../Theme';
 
+console.log('** GitHub Access Token **');
+// @ts-ignore
+console.log( process.env.REACT_APP_GITHUB_PERSONAL_ACCESS_TOKEN);
+
 /**
  * HttpLink adapter for GitHub graphql API
  */
@@ -40,6 +44,8 @@ const ApolloClientBase = <P, S>(WrappedComponent: React.ComponentType<P>) => {
         </ApolloProvider>
     );
 
+    console.log('** APOLLO CLIENT **');
+    console.log(gitHubClient);
     return implementation;
 };
 
