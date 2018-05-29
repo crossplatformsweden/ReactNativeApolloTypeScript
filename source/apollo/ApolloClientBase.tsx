@@ -3,12 +3,14 @@ import { ApolloClient } from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider } from 'react-apollo';
+import { onError } from 'apollo-link-error';
+import { ApolloLink } from 'apollo-link';
 import { View } from 'react-native';
 import Theme from '../Theme';
 
 console.log('** GitHub Access Token **');
 // @ts-ignore
-console.log( process.env.REACT_APP_GITHUB_PERSONAL_ACCESS_TOKEN);
+console.log(process.env.REACT_APP_GITHUB_PERSONAL_ACCESS_TOKEN);
 
 /**
  * HttpLink adapter for GitHub graphql API
@@ -26,8 +28,23 @@ const gitHubHttpLink = new HttpLink({
  */
 export const cache = new InMemoryCache();
 
+/**
+ * Global error handling. Allows sending GraphQL errors to for example Sentry insights
+ */
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+    if (graphQLErrors) {
+        console.log('** GRAPHQL ERROR **');
+        console.log(graphQLErrors);
+    }
+
+    if (networkError) {
+        console.log('** NETWORK ERROR **');
+        console.log(networkError);
+    }
+});
+
 export const gitHubClient = new ApolloClient({
-    link: gitHubHttpLink,
+    link: ApolloLink.from([errorLink, gitHubHttpLink]),
     cache,
 });
 
