@@ -54,36 +54,38 @@ class CompanyView extends React.Component<Variables, Variables> {
 
     render() {
         return (
-            <OrganizationQuery query={GetOrganizationQuery} variables={this.props}>
-                {({ loading, data, error }: { loading: boolean, data: Response, error?: Error }) => {
-                    if (error) {
-                        console.log('** ERROR **');
-                        console.log(error);
-                        return <View style={Theme.container}><Text style={{ color: 'red' }}>{error.message}</Text></View>;
-                    }
+            <View style={[Theme.container, Theme.paddingDefault]}>
+                <OrganizationQuery query={GetOrganizationQuery} variables={this.props}>
+                    {({ loading, data, error }: { loading: boolean, data: Response, error?: Error }) => {
+                        if (error) {
+                            console.log('** ERROR **');
+                            console.log(error);
+                            return <View style={Theme.container}><Text style={{ color: 'red' }}>{error.message}</Text></View>;
+                        }
 
-                    if (loading) {
-                        return <View style={Theme.container}><Text>Loading...</Text></View>;
-                    }
+                        if (loading) {
+                            return <View style={Theme.container}><Text>Loading...</Text></View>;
+                        }
 
-                    return <View style={Theme.container}>
-                        {data && data.organization ? (
-                            <View style={Theme.container}>
-                                <Text style={Theme.title}>Url</Text>
-                                <Text style={Theme.textBlock}>{data.organization.url}</Text>
-                                {data.organization.repository ? (
-                                    <View>
-                                        // @ts-ignore
-                                        <Text style={Theme.title}>Repository</Text>
-                                        <Text style={Theme.textBlock}>{data.organization.repository.name}</Text>
-                                        <Text style={Theme.textBlock}>{data.organization.repository.url}</Text>
-                                    </View>
-                                ) : null}
-                            </View>
-                        ) : null}
-                    </View>;
-                }}
-            </OrganizationQuery>
+                        return <View style={Theme.container}>
+                            {data && data.organization ? (
+                                <View style={Theme.container}>
+                                    <Text style={Theme.title}>Url</Text>
+                                    <Text style={Theme.textBlock}>{data.organization.url}</Text>
+                                    {data.organization.repository ? (
+                                        <View>
+                                            // @ts-ignore
+                                            <Text style={Theme.title}>Repository</Text>
+                                            <Text style={Theme.textBlock}>{data.organization.repository.name}</Text>
+                                            <Text style={Theme.textBlock}>{data.organization.repository.url}</Text>
+                                        </View>
+                                    ) : null}
+                                </View>
+                            ) : null}
+                        </View>;
+                    }}
+                </OrganizationQuery>
+            </View>
         );
     }
 }

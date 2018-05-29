@@ -1,4 +1,4 @@
-// navigator/components/AppNavigator
+// Navigator
 // @ts-nocheck
 import React from 'react';
 import { Platform } from 'react-native';
@@ -8,11 +8,12 @@ import {
   // @ts-ignore - bad mappings
 } from '@expo/vector-icons';
 
+import { NavigationConstants } from './Types';
 import Theme, { Colors, TabIconSize } from './Theme';
 
 // Component views used in navigation
 import MainContainer from './main/MainContainer';
-import { NavigationConstants } from './Types';
+import ProfileContainer from './profile/components/ProfileComponent';
 
 // interface RouterProps {
 //   sceneStyle?: any;
@@ -26,13 +27,13 @@ const homeIcon = () => (
   <FontAwesome name='home' size={TabIconSize} style={Theme.tabBarIcon} />
 );
 
-// const profileIcon = () => (
-//   <FontAwesome
-//     name='user-circle-o'
-//     size={TabIconSize}
-//     style={Theme.tabBarIcon}
-//   />
-// );
+const profileIcon = () => (
+  <FontAwesome
+    name='user-circle-o'
+    size={TabIconSize}
+    style={Theme.tabBarIcon}
+  />
+);
 
 // TODO: Prefix breaks current version: use when stable
 /**
@@ -82,16 +83,16 @@ const Navigator = () => (
             // @ts-ignore - bad TS map
             icon={homeIcon}
           />
-          {/* <Scene
-          hideNavBar
-          key={NavigationConstants.PROFILE}
-          component={ProfileContainer}
-          tintColor={Colors.CrossYellow}
-          tabBarLabel='Me'
-          titleStyle={{ color: 'white' }}
-          // @ts-ignore - bad TS map
-          icon={profileIcon}
-        /> */}
+          <Scene
+            // @ts-ignore - bad TS map
+            component={ProfileContainer}
+            hideNavBar
+            icon={profileIcon}
+            key={NavigationConstants.PROFILE}
+            tabBarLabel='Me'
+            tintColor={Colors.CrossYellow}
+            titleStyle={{ color: 'white' }}
+          />
         </Tabs>
         {/* <Scene
         key={NavigationConstants.LOGIN}

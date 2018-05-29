@@ -65,41 +65,43 @@ class CompanySearch extends React.Component<Variables, Variables> {
 
     render() {
         return (
-            <OrganizationQuery query={GetOrganizationQuery} variables={this.state}>
-                {({ loading, data, error }: { loading: boolean, data: Response, error?: Error }) => {
-                    if (error) {
-                        return <View><Text>{error}</Text></View>;
-                    }
+            <View style={[Theme.container, Theme.paddingDefault]}>
+                <OrganizationQuery query={GetOrganizationQuery} variables={this.state}>
+                    {({ loading, data, error }: { loading: boolean, data: Response, error?: Error }) => {
+                        if (error) {
+                            return <View><Text>{error}</Text></View>;
+                        }
 
-                    if (loading) {
-                        return <View><Text>Loading...</Text></View>;
-                    }
+                        if (loading) {
+                            return <View><Text>Loading...</Text></View>;
+                        }
 
-                    return <View style={Theme.container}>
-                        <Text style={Theme.title}>GitHub!</Text>
-                        <Text>Show open issues on GitHub using GraphQL</Text>
-                        <View style={Theme.container}>
-                            <TextInput placeholder='Organization'
-                                value={this.state.organization}
-                                onChangeText={(val) => this.setState({ organization: val })}></TextInput>
-                            <TextInput placeholder='Repository'
-                                value={this.state.repository}
-                                onChangeText={(val) => this.setState({ repository: val })}></TextInput>
-                            <Button title='Search' onPress={() => this.onSearch()} />
-                        </View>
-                        {data ? (
+                        return <View style={Theme.container}>
+                            <Text style={Theme.title}>GitHub!</Text>
+                            <Text>Show open issues on GitHub using GraphQL</Text>
                             <View style={Theme.container}>
-                                <Text style={Theme.textBlock}>Url: {data.organization.url}</Text>
-                                {data.organization.repository ? (
-                                    // @ts-ignore
-                                    <Text style={Theme.textBlock}>Repo: {data.repository.url}</Text>
-                                ) : null}
+                                <TextInput placeholder='Organization'
+                                    value={this.state.organization}
+                                    onChangeText={(val) => this.setState({ organization: val })}></TextInput>
+                                <TextInput placeholder='Repository'
+                                    value={this.state.repository}
+                                    onChangeText={(val) => this.setState({ repository: val })}></TextInput>
+                                <Button title='Search' onPress={() => this.onSearch()} />
                             </View>
-                        ) : null}
-                        <Text style={{ color: 'red' }}>{error}</Text>
-                    </View>;
-                }}
-            </OrganizationQuery>
+                            {data ? (
+                                <View style={Theme.container}>
+                                    <Text style={Theme.textBlock}>Url: {data.organization.url}</Text>
+                                    {data.organization.repository ? (
+                                        // @ts-ignore
+                                        <Text style={Theme.textBlock}>Repo: {data.repository.url}</Text>
+                                    ) : null}
+                                </View>
+                            ) : null}
+                            <Text style={{ color: 'red' }}>{error}</Text>
+                        </View>;
+                    }}
+                </OrganizationQuery>
+            </View>
         );
     }
 
