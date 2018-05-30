@@ -5,7 +5,7 @@
   ],
   "env": {
     "development": {
-      "plugins": ["transform-react-jsx-source", "import-graphql"]
+      "plugins": ["transform-react-jsx-source"]
     }
   }
 }

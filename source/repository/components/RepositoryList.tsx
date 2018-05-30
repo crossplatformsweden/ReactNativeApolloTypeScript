@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, Linking } from 'react-native';
 import { RepoEdge } from '../../Types';
 import Theme from '../../Theme';
 
@@ -15,6 +15,10 @@ const RepositoryList = ({ repositories }: IProps) =>
                     <View key={node.id} style={Theme.para}>
                         <Text style={Theme.title}>{node.name}</Text>
                         <Text>{node.stargazers.totalCount} Stars</Text>
+                        <Text style={Theme.title}>Url</Text>
+                        <Text style={Theme.link}
+                            onPress={() =>
+                                Linking.openURL(node.url)}>{node.url}</Text>
                         <Text style={Theme.para}>{node.descriptionHTML}</Text>
                     </View>
                 )) : <Text>No repositores</Text>}

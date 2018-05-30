@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Linking } from 'react-native';
 import gql from 'graphql-tag';
 import 'cross-fetch/polyfill';
 import Theme from '../Theme';
@@ -76,7 +76,10 @@ class CompanyView extends React.Component<Variables, Variables> {
                                             // @ts-ignore
                                             <Text style={Theme.title}>Repository</Text>
                                             <Text style={Theme.textBlock}>{data.organization.repository.name}</Text>
-                                            <Text style={Theme.textBlock}>{data.organization.repository.url}</Text>
+                                            <Text style={Theme.link}
+                                                onPress={() =>
+                                                    Linking.openURL(data.organization.repository.url)}>
+                                                {data.organization.repository.url}</Text>
                                         </View>
                                     ) : null}
                                 </View>

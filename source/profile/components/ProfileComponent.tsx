@@ -73,6 +73,7 @@ const ProfileComponent = () => (
                     <Text style={Theme.textBlock}>{data.viewer.company}</Text>
                     <Text style={Theme.title}>Bio</Text>
                     <Text style={Theme.textBlock}>{data.viewer.bio}</Text>
+                    <Text style={Theme.title}>Repositories</Text>
                     <View style={[Theme.container, Theme.paddingDefault]}>
                         <RepositoryList repositories={data.viewer.repositories} />
                     </View>
