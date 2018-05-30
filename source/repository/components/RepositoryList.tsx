@@ -1,28 +1,18 @@
 import * as React from 'react';
-import { View, Text, ScrollView, Linking } from 'react-native';
-import { RepoEdge } from '../../Types';
-import Theme from '../../Theme';
+import { Text, ScrollView} from 'react-native';
+import { RepoEdge, RepoNodeItem } from '../../Types';
+import RepositoryItem from './RepositoryItem';
 
 export interface IProps {
     repositories: RepoEdge;
 }
 
 const RepositoryList = ({ repositories }: IProps) =>
-    <View>
-        <ScrollView>
-            {repositories && repositories.edges.length ?
-                repositories.edges.map(({ node }) => (
-                    <View key={node.id} style={Theme.para}>
-                        <Text style={Theme.title}>{node.name}</Text>
-                        <Text>{node.stargazers.totalCount} Stars</Text>
-                        <Text style={Theme.title}>Url</Text>
-                        <Text style={Theme.link}
-                            onPress={() =>
-                                Linking.openURL(node.url)}>{node.url}</Text>
-                        <Text style={Theme.para}>{node.descriptionHTML}</Text>
-                    </View>
-                )) : <Text>No repositores</Text>}
-        </ScrollView>
-    </View>;
+    <ScrollView>
+        {repositories && repositories.edges.length ?
+            repositories.edges.map(({ node }: { node: RepoNodeItem }) => (
+                <RepositoryItem key={node.id} repository={node} />
+            )) : <Text>No repositores</Text>}
+    </ScrollView>;
 
 export default RepositoryList;

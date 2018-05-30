@@ -1,6 +1,12 @@
 # Apollo for React-Native with TypeScript
 
-Implementation of Apollo for GraphQL in React-Native using TypeScript boilerplate project. Learn more:
+Implementation of Apollo for GraphQL in React-Native using TypeScript boilerplate project.
+
+Require you to add a [GitHub Access Token](#reactnative-environment-config).
+
+**Warning:** uses live data from the GitHub API and your personal user. Use with caution.
+
+Learn more:
 
 https://www.robinwieruch.de/react-graphql-apollo-tutorial/
 
@@ -20,37 +26,41 @@ Then run normal React-Native scripts such as `npm start`.
 
 ## Table of Contents
 
-- [Plugins](#plugins)
-  * [GraphQL](#graphql)
-  * [React Apollo Snippets](#react-apollo-snippets)
-- [Updating to New Releases](#updating-to-new-releases)
-- [Available Scripts](#available-scripts)
-  * [`npm start`](#-npm-start-)
-  * [`npm run build`](#-npm-run-build-)
-    + [`npm run build-watch`](#-npm-run-build-watch-)
-    + [`npm run build-watch-win`](#-npm-run-build-watch-win-)
-  * [`npm test`](#-npm-test-)
-    + [`npm run test-watch`](#-npm-run-test-watch-)
-  * [`npm run ios`](#-npm-run-ios-)
-  * [`npm run android`](#-npm-run-android-)
-      - [Using Android Studio's `adb`](#using-android-studio-s--adb-)
-      - [Using Genymotion's `adb`](#using-genymotion-s--adb-)
-    + [`npm run eject`](#-npm-run-eject-)
-- [Customizing App Display Name and Icon](#customizing-app-display-name-and-icon)
-- [Writing and Running Tests](#writing-and-running-tests)
-- [Environment Variables](#environment-variables)
-  * [Configuring Packager IP Address](#configuring-packager-ip-address)
-- [Sharing and Deployment](#sharing-and-deployment)
-  * [Publishing to Expo's React Native Community](#publishing-to-expo-s-react-native-community)
-  * [Building an Expo "standalone" app](#building-an-expo--standalone--app)
-  * [Ejecting from Create React Native App](#ejecting-from-create-react-native-app)
-    + [Should I Use ExpoKit?](#should-i-use-expokit-)
-- [Troubleshooting](#troubleshooting)
-  * [Networking](#networking)
-  * [iOS Simulator won't open](#ios-simulator-won-t-open)
-  * [QR Code does not scan](#qr-code-does-not-scan)
+- [Apollo for React-Native with TypeScript](#apollo-for-react-native-with-typescript)
+  * [Plugins](#plugins)
+    + [GraphQL](#graphql)
+    + [ReactNative Environment Config](#reactnative-environment-config)
+    + [Cross-Fetch](#cross-fetch)
+    + [React Apollo Snippets](#react-apollo-snippets)
+  * [Updating to New Releases](#updating-to-new-releases)
+  * [Available Scripts](#available-scripts)
+    + [`npm start`](#-npm-start-)
+    + [`npm run build`](#-npm-run-build-)
+      - [`npm run build-watch`](#-npm-run-build-watch-)
+      - [`npm run build-watch-win`](#-npm-run-build-watch-win-)
+    + [`npm test`](#-npm-test-)
+      - [`npm run test-watch`](#-npm-run-test-watch-)
+    + [`npm run ios`](#-npm-run-ios-)
+    + [`npm run android`](#-npm-run-android-)
+        * [Using Android Studio's `adb`](#using-android-studio-s--adb-)
+        * [Using Genymotion's `adb`](#using-genymotion-s--adb-)
+      - [`npm run eject`](#-npm-run-eject-)
+  * [Customizing App Display Name and Icon](#customizing-app-display-name-and-icon)
+  * [Writing and Running Tests](#writing-and-running-tests)
+  * [Environment Variables](#environment-variables)
+    + [Configuring Packager IP Address](#configuring-packager-ip-address)
+  * [Sharing and Deployment](#sharing-and-deployment)
+    + [Publishing to Expo's React Native Community](#publishing-to-expo-s-react-native-community)
+    + [Building an Expo "standalone" app](#building-an-expo--standalone--app)
+    + [Ejecting from Create React Native App](#ejecting-from-create-react-native-app)
+      - [Should I Use ExpoKit?](#should-i-use-expokit-)
+  * [Troubleshooting](#troubleshooting)
+    + [Networking](#networking)
+    + [iOS Simulator won't open](#ios-simulator-won-t-open)
+    + [QR Code does not scan](#qr-code-does-not-scan)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
 
 ## Plugins
 ### GraphQL
@@ -62,6 +72,8 @@ Requires .gqlconfig file for @playlyfe/gql node library
 https://github.com/brysgo/babel-plugin-inline-dotenv
 
 Edit the `.env` file and add your GitHub Personal Access Token
+
+**Warning:** The app uses live data from the GitHub API and your personal user. Use with caution.
 
 ### Cross-Fetch
 Resolves issues with Fetch API in Apollo client
