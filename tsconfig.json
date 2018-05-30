@@ -17,7 +17,7 @@
       "types": ["react", "react-native", "jest"],
       "pretty": true,
       "removeComments": true,
-      "skipLibCheck": true
+      "skipLibCheck": true,
     },
     "filesGlob": [
       "typings/index.d.ts",

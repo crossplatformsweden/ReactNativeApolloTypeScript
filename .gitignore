@@ -4,6 +4,7 @@
 .expo/
 
 # misc
+.env
 .env.local
 .env.dev
 .env.development

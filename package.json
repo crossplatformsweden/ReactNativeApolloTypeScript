@@ -21,6 +21,7 @@
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-jest": "^22.4.1",
+    "babel-plugin-import-graphql": "^2.4.4",
     "babel-plugin-inline-dotenv": "^1.1.2",
     "babel-polyfill": "^6.26.0",
     "babel-preset-airbnb": "^2.4.0",
