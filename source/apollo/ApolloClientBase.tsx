@@ -1,37 +1,18 @@
 import * as React from 'react';
-import { ApolloClient } from 'apollo-client';
-import { HttpLink } from 'apollo-link-http';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
-import { onError } from 'apollo-link-error';
-import { ApolloLink } from 'apollo-link';
 import { View } from 'react-native';
 import Theme from '../Theme';
 
-console.log('** GitHub Access Token **');
-// @ts-ignore
-console.log(process.env.REACT_APP_GITHUB_PERSONAL_ACCESS_TOKEN);
-
-/**
- * HttpLink adapter for GitHub graphql API
- */
-const gitHubHttpLink = new HttpLink({
-    uri: 'https://api.github.com/graphql',
-    headers: {
-        // @ts-ignore
-        authorization: 'Bearer ' + process.env.REACT_APP_GITHUB_PERSONAL_ACCESS_TOKEN,
-    },
-});
-
-/**
- * Holds the app cache
- */
-export const cache = new InMemoryCache();
+interface IErrorLink {
+    graphQLErrors?: any;
+    networkError?: Error;
+}
 
 /**
  * Global error handling. Allows sending GraphQL errors to for example Sentry insights
  */
-const errorLink = onError(({ graphQLErrors, networkError }) => {
+const errorLink = ({ graphQLErrors, networkError }: IErrorLink) => {
     if (graphQLErrors) {
         console.log('** GRAPHQL ERROR **');
         console.log(graphQLErrors);
@@ -41,12 +22,31 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
         console.log('** NETWORK ERROR **');
         console.log(networkError);
     }
+};
+
+// @ts-ignore
+const token = process.env.REACT_APP_GITHUB_PERSONAL_ACCESS_TOKEN;
+console.log('** GitHub Access Token **');
+console.log(token);
+
+const request = async (operation: any) => {
+    operation.setContext({
+        headers: {
+            authorization: 'Bearer ' + token,
+        },
+    });
+};
+
+/**
+ * Implementation of ApolloClient with link and cache
+ */
+export const GitHubClient = new ApolloClient({
+    uri: 'https://api.github.com/graphql',
+    onError: errorLink,
+    request,
 });
 
-export const gitHubClient = new ApolloClient({
-    link: ApolloLink.from([errorLink, gitHubHttpLink]),
-    cache,
-});
+export type GitHubClient = typeof GitHubClient;
 
 /**
  * Wraps the component in ApolloProvider, passing props
@@ -54,7 +54,8 @@ export const gitHubClient = new ApolloClient({
 // @ts-ignore
 const ApolloClientBase = <P, S>(WrappedComponent: React.ComponentType<P>) => {
     const implementation = () => (
-        <ApolloProvider client={gitHubClient}>
+        // @ts-ignore
+        <ApolloProvider client={GitHubClient}>
             <View style={Theme.container}>
                 <WrappedComponent {...this.props} />
             </View>
@@ -62,7 +63,7 @@ const ApolloClientBase = <P, S>(WrappedComponent: React.ComponentType<P>) => {
     );
 
     console.log('** APOLLO CLIENT **');
-    console.log(gitHubClient);
+    console.log(GitHubClient);
     return implementation;
 };
 
