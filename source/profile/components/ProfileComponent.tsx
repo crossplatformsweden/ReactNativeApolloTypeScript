@@ -7,9 +7,12 @@ import { FormValidationMessage } from 'react-native-elements';
 import BusyIndicator from '../../core/components/BusyIndicator';
 import * as types from '../../Types';
 import RepositoryList from '../../repository/components/RepositoryList';
+import RepositoryFragment from '../../fragments/RepositoryFragment';
 
 /**
  * Queries current user as "viewer" and repositories
+ *
+ * @see {RepositoryFragment} - referenced in this query
  */
 const userQuery = gql`
   {
@@ -25,30 +28,14 @@ const userQuery = gql`
         ) {
             edges {
                 node {
-                    id
-                    name
-                    url
-                    descriptionHTML
-                    primaryLanguage {
-                        name
-                    }
-                    owner {
-                        login
-                        url
-                    }
-                    stargazers {
-                        totalCount
-                    }
-                    viewerHasStarred
-                    watchers {
-                        totalCount
-                    }
-                    viewerSubscription
+                    ...repository
                 }
             }
         }
     }
   }
+
+  ${RepositoryFragment}
 `;
 
 const ProfileComponent = () => (
