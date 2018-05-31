@@ -19,9 +19,9 @@ export enum NavigationConstants {
      * The profile screen
      */
     PROFILE = 'ProfileScreen',
-  }
+}
 
-  export type RepoEdge = {
+export type RepoEdge = {
     edges: Array<RepoNode>;
 };
 
@@ -53,6 +53,27 @@ export type RepoNodeItem = {
 
 export type RepoNode = {
     node: RepoNodeItem;
+};
+
+export type Starrable = {
+    id: string;
+    viewerHasStarred: boolean;
+};
+
+export type StarMutation = {
+    starrable: Starrable;
+};
+
+export type AddStar = {
+    addStar: StarMutation;
+};
+
+export type RemoveStar = {
+    removeStar: StarMutation;
+};
+
+export type StarMutationData = {
+    data: AddStar | RemoveStar;
 };
 
 export type Viewer = {
