@@ -88,3 +88,21 @@ export type Viewer = {
 export type Response = {
     viewer?: Viewer
 };
+
+
+type Repository = {
+    name: string,
+    url: string
+};
+type Organization = {
+    name: string,
+    url: string,
+    repository?: Repository
+};
+
+type Variables = {
+    organization: string, repository?: string
+};
+type Response = {
+    organization: Organization
+};

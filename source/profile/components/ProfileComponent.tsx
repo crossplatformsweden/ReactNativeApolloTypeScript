@@ -1,46 +1,16 @@
 import * as React from 'react';
 import { View, Text } from 'react-native';
 import Theme from '../../Theme';
-import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import { FormValidationMessage } from 'react-native-elements';
 import BusyIndicator from '../../core/components/BusyIndicator';
 import * as types from '../../Types';
 import RepositoryList from '../../repository/components/RepositoryList';
-import RepositoryFragment from '../../fragments/RepositoryFragment';
-
-/**
- * Queries current user as "viewer" and repositories
- *
- * @see {RepositoryFragment} - referenced in this query
- */
-const userQuery = gql`
-  {
-    viewer {
-    login,
-    name,
-    url,
-    bio,
-    company
-    repositories(
-        first: 5
-        orderBy: { direction: DESC, field: STARGAZERS }
-        ) {
-            edges {
-                node {
-                    ...repository
-                }
-            }
-        }
-    }
-  }
-
-  ${RepositoryFragment}
-`;
+import GetUserQuery from '../../queries/GetUserQuery';
 
 const ProfileComponent = () => (
-    <Query query={userQuery}>
-        {({ loading, data, error }: { loading: boolean, data: types.Response, error?: Error }) => {
+    <Query query={GetUserQuery}>
+        {({ loading, data, error }: { loading: boolean, data: types.ViewerResponse, error?: Error }) => {
             if (error) {
                 return <FormValidationMessage>{error.message}</FormValidationMessage>;
             }

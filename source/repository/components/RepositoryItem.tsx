@@ -53,26 +53,13 @@ const updateAddStar = (client: GitHubClient, data: StarMutationData) => {
     }
 
     // Get repository from cache
-    const cacheRepo: RepoNodeItem = client.readFragment({
-        id: `Repository:${starId}`,
-        fragment: RepositoryFragment,
-    });
+    const cacheRepo: RepoNodeItem = getRepoFromCache(client, starId);
 
     // Update count of stargazers
     const newCount = cacheRepo.stargazers.totalCount + 1;
 
     // Write to cache
-    client.writeFragment({
-        id: `Repository:${starId}`,
-        fragment: RepositoryFragment,
-        data: {
-            ...cacheRepo,
-            stargazers: {
-                ...cacheRepo.stargazers,
-                totalCount: newCount,
-            },
-        },
-    });
+    writeStarCountToCache(client, starId, cacheRepo, newCount);
     console.log('Updated cache');
 };
 
@@ -88,26 +75,13 @@ const updateRemoveStar = (client: GitHubClient, data: StarMutationData) => {
     }
 
     // Get repository from cache
-    const cacheRepo: RepoNodeItem = client.readFragment({
-        id: `Repository:${starId}`,
-        fragment: RepositoryFragment,
-    });
+    const cacheRepo: RepoNodeItem = getRepoFromCache(client, starId);
 
     // Update count of stargazers
     const newCount = cacheRepo.stargazers.totalCount - 1;
 
     // Write to cache
-    client.writeFragment({
-        id: `Repository:${starId}`,
-        fragment: RepositoryFragment,
-        data: {
-            ...cacheRepo,
-            stargazers: {
-                ...cacheRepo.stargazers,
-                totalCount: newCount,
-            },
-        },
-    });
+    writeStarCountToCache(client, starId, cacheRepo, newCount);
     console.log('Updated cache');
 };
 
@@ -175,3 +149,24 @@ const RepositoryItem = ({ repository }: IProps) =>
     </View>;
 
 export default RepositoryItem;
+
+function writeStarCountToCache(client: GitHubClient, starId: string, cacheRepo: RepoNodeItem, newCount: number) {
+    client.writeFragment({
+        id: `Repository:${starId}`,
+        fragment: RepositoryFragment,
+        data: {
+            ...cacheRepo,
+            stargazers: {
+                ...cacheRepo.stargazers,
+                totalCount: newCount,
+            },
+        },
+    });
+}
+
+function getRepoFromCache(client: GitHubClient, starId: string): RepoNodeItem {
+    return client.readFragment({
+        id: `Repository:${starId}`,
+        fragment: RepositoryFragment,
+    });
+}
