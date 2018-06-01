@@ -72,8 +72,10 @@ export type RemoveStar = {
     removeStar: StarMutation;
 };
 
+export type AddOrRemoeStar =  AddStar | RemoveStar;
+
 export type StarMutationData = {
-    data: AddStar | RemoveStar;
+    data: AddOrRemoeStar;
 };
 
 export type Viewer = {
@@ -85,24 +87,25 @@ export type Viewer = {
     repositories?: RepoEdge
 };
 
-export type Response = {
-    viewer?: Viewer
+export type ViewerResponse = {
+    viewer?: Viewer;
 };
 
-
-type Repository = {
+export type Repository = {
     name: string,
     url: string
 };
-type Organization = {
+
+export type Organization = {
     name: string,
     url: string,
     repository?: Repository
 };
 
-type Variables = {
+export type OrganizationVariables = {
     organization: string, repository?: string
 };
-type Response = {
+
+export type OrganizationResponse = {
     organization: Organization
 };

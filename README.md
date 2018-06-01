@@ -2,13 +2,17 @@
 
 Implementation of Apollo for GraphQL in React-Native using TypeScript boilerplate project.
 
-Require you to add a [GitHub Access Token](#reactnative-environment-config).
+Features and architecture:
+
+* `/queries`: GraphQL `Query` files using TypeScript
+* `/fragments`: re-usable fragments of GraphQL properties
+* `/repository`: GraphQL `Mutation` with state manipulation
+* `/core`: `BusyIndicator.ts` with spinner (Expo supported)
+* `/apollo`: `ApolloClientBase.ts` Higher Order Component used in `AppContainer.ts`
+
+Require you to add a [GitHub Access Token](#reactnative-environment-config) to `.env` in root.
 
 **Warning:** uses live data from the GitHub API and your personal user. Use with caution.
-
-Learn more:
-
-https://www.robinwieruch.de/react-graphql-apollo-tutorial/
 
 Start by running TypeScript compile in watch mode
 
@@ -23,6 +27,10 @@ npm run build-watch-win
 ```
 
 Then run normal React-Native scripts such as `npm start`.
+
+Learn GraphQL Apollo:
+
+* https://www.robinwieruch.de/react-graphql-apollo-tutorial/
 
 ## Table of Contents
 
@@ -63,11 +71,6 @@ Then run normal React-Native scripts such as `npm start`.
 
 
 ## Plugins
-### GraphQL
-https://marketplace.visualstudio.com/items?itemName=kumar-harsh.graphql-for-vscode
-
-Requires .gqlconfig file for @playlyfe/gql node library
-
 ### ReactNative Environment Config
 https://github.com/brysgo/babel-plugin-inline-dotenv
 

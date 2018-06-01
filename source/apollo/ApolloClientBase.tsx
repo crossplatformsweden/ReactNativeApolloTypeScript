@@ -24,12 +24,7 @@ const errorLink = ({ graphQLErrors, networkError }: IErrorLink) => {
     }
 };
 
-// @ts-ignore
-const token = process.env.REACT_APP_GITHUB_PERSONAL_ACCESS_TOKEN;
-console.log('** GitHub Access Token **');
-console.log(token);
-
-const request = async (operation: any) => {
+const request = (token: string = null) => async (operation: any) => {
     operation.setContext({
         headers: {
             authorization: 'Bearer ' + token,
@@ -39,31 +34,44 @@ const request = async (operation: any) => {
 
 /**
  * Implementation of ApolloClient with link and cache
+ * @param uri optional URI. Otherwise GitHub is used
+ * @param token optional token. Required for GitHub
  */
-export const GitHubClient = new ApolloClient({
-    uri: 'https://api.github.com/graphql',
+export const CreateApolloClient = (uri: string = 'https://api.github.com/graphql', token: string = null) => new ApolloClient({
+    uri,
     onError: errorLink,
-    request,
+    request: request(token),
 });
 
-export type GitHubClient = typeof GitHubClient;
+/**
+ * Mock to get proper typing
+ */
+const ApolloClientMock = new ApolloClient({
+    uri: '',
+});
+
+export type CreateApolloClient = typeof ApolloClientMock;
 
 /**
  * Wraps the component in ApolloProvider, passing props
+ * @param WrappedComponent calling React component
+ * @param uri optional URI. Otherwise GitHub is used
+ * @param token optional token. Required for GitHub
  */
 // @ts-ignore
-const ApolloClientBase = <P, S>(WrappedComponent: React.ComponentType<P>) => {
+const ApolloClientBase = <P, S>(WrappedComponent: React.ComponentType<P>, uri: string = 'https://api.github.com/graphql', token: string = null) => {
+    console.log('** URI**');
+    console.log(uri);
+
     const implementation = () => (
         // @ts-ignore
-        <ApolloProvider client={GitHubClient}>
+        <ApolloProvider client={CreateApolloClient(uri, token)}>
             <View style={Theme.container}>
                 <WrappedComponent {...this.props} />
             </View>
         </ApolloProvider>
     );
 
-    console.log('** APOLLO CLIENT **');
-    console.log(GitHubClient);
     return implementation;
 };
 

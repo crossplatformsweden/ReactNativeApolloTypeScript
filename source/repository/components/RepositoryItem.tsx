@@ -6,7 +6,7 @@ import { RepoNodeItem, StarMutationData, RemoveStar, AddStar } from '../../Types
 import Theme from '../../Theme';
 import { FormValidationMessage } from 'react-native-elements';
 import BusyIndicator from '../../core/components/BusyIndicator';
-import { GitHubClient } from '../../apollo/ApolloClientBase';
+import { CreateApolloClient } from '../../apollo/ApolloClientBase';
 import RepositoryFragment from '../../fragments/RepositoryFragment';
 
 export interface IProps {
@@ -46,7 +46,7 @@ const RemoveRepositoryStarMutation = gql`
  * @param client {@type GitHubClient} instance
  * @param data {@type StarMutationData} of resulting mutation
  */
-const updateAddStar = (client: GitHubClient, data: StarMutationData) => {
+const updateAddStar = (client: CreateApolloClient, data: StarMutationData) => {
     const starId = (data.data as AddStar).addStar.starrable.id;
     if (!starId) {
         return;
@@ -68,7 +68,7 @@ const updateAddStar = (client: GitHubClient, data: StarMutationData) => {
  * @param client {@type GitHubClient} instance
  * @param data {@type StarMutationData} of resulting mutation
  */
-const updateRemoveStar = (client: GitHubClient, data: StarMutationData) => {
+const updateRemoveStar = (client: CreateApolloClient, data: StarMutationData) => {
     const starId = (data.data as RemoveStar).removeStar.starrable.id;
     if (!starId) {
         return;
@@ -150,7 +150,7 @@ const RepositoryItem = ({ repository }: IProps) =>
 
 export default RepositoryItem;
 
-function writeStarCountToCache(client: GitHubClient, starId: string, cacheRepo: RepoNodeItem, newCount: number) {
+function writeStarCountToCache(client: CreateApolloClient, starId: string, cacheRepo: RepoNodeItem, newCount: number) {
     client.writeFragment({
         id: `Repository:${starId}`,
         fragment: RepositoryFragment,
@@ -164,7 +164,7 @@ function writeStarCountToCache(client: GitHubClient, starId: string, cacheRepo: 
     });
 }
 
-function getRepoFromCache(client: GitHubClient, starId: string): RepoNodeItem {
+function getRepoFromCache(client: CreateApolloClient, starId: string): RepoNodeItem {
     return client.readFragment({
         id: `Repository:${starId}`,
         fragment: RepositoryFragment,
