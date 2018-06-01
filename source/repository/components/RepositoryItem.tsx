@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { View, Text, Linking, Button } from 'react-native';
-import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import { RepoNodeItem, StarMutationData, RemoveStar, AddStar } from '../../Types';
 import Theme from '../../Theme';
@@ -8,38 +7,11 @@ import { FormValidationMessage } from 'react-native-elements';
 import BusyIndicator from '../../core/components/BusyIndicator';
 import { CreateApolloClient } from '../../apollo/ApolloClientBase';
 import RepositoryFragment from '../../fragments/RepositoryFragment';
+import StarRepositoryMutation, { RemoveRepositoryStarMutation } from '../../mutations/StarRepositoryMutation';
 
 export interface IProps {
     repository: RepoNodeItem;
 }
-
-/**
- * GraphQL mutation to add a star for the specified repository "id"
- */
-const StarRepositoryMutation = gql`
-  mutation($id: ID!) {
-    addStar(input: { starrableId: $id }) {
-      starrable {
-        id
-        viewerHasStarred
-      }
-    }
-  }
-`;
-
-/**
- * GraphQL mutation to add a star for the specified repository "id"
- */
-const RemoveRepositoryStarMutation = gql`
-  mutation($id: ID!) {
-    removeStar(input: { starrableId: $id }) {
-      starrable {
-        id
-        viewerHasStarred
-      }
-    }
-  }
-`;
 
 /**
  * Occurs when add star mutation completes
@@ -90,7 +62,7 @@ const RepositoryItem = ({ repository }: IProps) =>
     <View style={Theme.para}>
         <Text style={Theme.title}>{repository.name}</Text>
         <Text>{repository.stargazers.totalCount} Stars</Text>
-        <Text style={Theme.title}>Url</Text>
+        <Text style={Theme.label}>Url</Text>
         <Text style={Theme.link}
             onPress={() =>
                 Linking.openURL(repository.url)}>{repository.url}</Text>

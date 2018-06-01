@@ -175,12 +175,17 @@ const Theme = StyleSheet.create({
   },
   para: {
     marginTop: 10,
+    width: 300,
   },
   title: {
     fontSize: 16,
     fontWeight: 'bold',
+    width: 300,
   },
-  link: { color: 'blue' },
+  link: {
+    color: 'blue',
+    width: 300,
+  },
   textBlock: {
     width: 300,
   },

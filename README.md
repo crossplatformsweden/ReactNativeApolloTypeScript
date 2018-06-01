@@ -2,13 +2,15 @@
 
 Implementation of Apollo for GraphQL in React-Native using TypeScript boilerplate project.
 
-Features and architecture:
+Features and architecture in `/source`:
 
 * `/queries`: GraphQL `Query` files using TypeScript
 * `/fragments`: re-usable fragments of GraphQL properties
-* `/repository`: GraphQL `Mutation` with state manipulation
 * `/core`: `BusyIndicator.ts` with spinner (Expo supported)
 * `/apollo`: `ApolloClientBase.ts` Higher Order Component used in `AppContainer.ts`
+* `/company`: search using React state and display company
+* `/profile`: Query current user and pass id to `RepositoryList`
+* `/repository`: GraphQL `Mutation` with state manipulation
 
 Require you to add a [GitHub Access Token](#reactnative-environment-config) to `.env` in root.
 

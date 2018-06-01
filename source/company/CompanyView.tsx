@@ -35,12 +35,15 @@ class CompanyView extends React.Component<OrganizationVariables, OrganizationVar
                         <View style={[Theme.container, Theme.paddingDefault]}>
                             {data && data.organization ? (
                                 <View style={Theme.container}>
-                                    <Text style={Theme.title}>Url</Text>
-                                    <Text style={Theme.textBlock}>{data.organization.url}</Text>
+                                <Text style={Theme.title}>{data.organization.name}</Text>
+                                    <Text style={Theme.label}>Url</Text>
+                                    <Text style={Theme.link}
+                                        onPress={() =>
+                                            Linking.openURL(data.organization.url)}>{data.organization.url}</Text>
                                     {data.organization.repository ? (
                                         <View>
                                             // @ts-ignore
-                                            <Text style={Theme.title}>Repository</Text>
+                                            <Text style={Theme.label}>Repository</Text>
                                             <Text style={Theme.textBlock}>{data.organization.repository.name}</Text>
                                             <Text style={Theme.link}
                                                 onPress={() =>
