@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, Linking, Button } from 'react-native';
+import { View, Text, Linking, Button, Switch } from 'react-native';
 import { Mutation } from 'react-apollo';
 import { RepoNodeItem, StarMutationData, RemoveStar, AddStar } from '../../Types';
 import Theme from '../../Theme';
@@ -8,9 +8,15 @@ import BusyIndicator from '../../core/components/BusyIndicator';
 import { CreateApolloClient } from '../../apollo/ApolloClientBase';
 import RepositoryFragment from '../../fragments/RepositoryFragment';
 import StarRepositoryMutation, { RemoveRepositoryStarMutation } from '../../mutations/StarRepositoryMutation';
+import _ from 'lodash';
 
 export interface IProps {
     repository: RepoNodeItem;
+    /**
+     * Toggle selection state of provided repository id
+     */
+    toggleSelectedRepository: (id: string, isSelected: boolean) => void;
+    selectedRepositoryIds: Array<string>;
 }
 
 /**
@@ -57,68 +63,76 @@ const updateRemoveStar = (client: CreateApolloClient, data: StarMutationData) =>
     console.log('Updated cache');
 };
 
-const RepositoryItem = ({ repository }: IProps) =>
+const RepositoryItem = ({ repository, toggleSelectedRepository, selectedRepositoryIds }: IProps) => {
+    const isSelected = _.includes(selectedRepositoryIds, repository.id, 0);
+    return (
+        <View style={Theme.para}>
+            <View style={Theme.horizontalTopLeft}>
+                <Switch value={isSelected}
+                onValueChange={(val) => toggleSelectedRepository(repository.id, val)} />
+                <View style={Theme.verticalTopLeft}>
+                    <Text style={Theme.title}>{repository.name}</Text>
+                    <Text>{repository.stargazers.totalCount} Stars</Text>
+                    <Text style={Theme.label}>Url</Text>
+                    <Text style={Theme.link}
+                        onPress={() =>
+                            Linking.openURL(repository.url)}>{repository.url}</Text>
+                    <Text style={Theme.para}>{repository.descriptionHTML}</Text>
+                    {!repository.viewerHasStarred ? (
+                        <Mutation
+                            // @ts-ignore - mappings incorrect for Mutations
+                            mutation={StarRepositoryMutation}
+                            update={updateAddStar}
+                            variables={{ id: repository.id }}>
+                            {(addStar, { loading, data, error }: { loading: boolean, data: StarMutationData, error?: Error }) => {
+                                if (error) {
+                                    return <FormValidationMessage>{error.message}</FormValidationMessage>;
+                                }
+                                if (loading) {
+                                    return <BusyIndicator isBusy message='Star rising..' />;
+                                }
 
-    <View style={Theme.para}>
-        <Text style={Theme.title}>{repository.name}</Text>
-        <Text>{repository.stargazers.totalCount} Stars</Text>
-        <Text style={Theme.label}>Url</Text>
-        <Text style={Theme.link}
-            onPress={() =>
-                Linking.openURL(repository.url)}>{repository.url}</Text>
-        <Text style={Theme.para}>{repository.descriptionHTML}</Text>
-        {!repository.viewerHasStarred ? (
-            <Mutation
-                // @ts-ignore - mappings incorrect for Mutations
-                mutation={StarRepositoryMutation}
-                update={updateAddStar}
-                variables={{ id: repository.id }}>
-                {(addStar, { loading, data, error }: { loading: boolean, data: StarMutationData, error?: Error }) => {
-                    if (error) {
-                        return <FormValidationMessage>{error.message}</FormValidationMessage>;
-                    }
-                    if (loading) {
-                        return <BusyIndicator isBusy message='Star rising..' />;
-                    }
+                                if (data) {
+                                    console.log('** ADD STAR MUTATION DATA **');
+                                    console.log(data);
+                                }
+                                return (
+                                    <Button onPress={() => addStar()} title={'Star'} />
+                                );
+                            }
+                            }
+                        </Mutation>
+                    ) :
+                        (
+                            <Mutation
+                                // @ts-ignore - mappings incorrect for Mutations
+                                mutation={RemoveRepositoryStarMutation}
+                                update={updateRemoveStar}
+                                variables={{ id: repository.id }}>
+                                {(removeStar, { loading, data, error }: { loading: boolean, data: any, error?: Error }) => {
+                                    if (error) {
+                                        return <FormValidationMessage>{error.message}</FormValidationMessage>;
+                                    }
+                                    if (loading) {
+                                        return <BusyIndicator isBusy message='Star falling..' />;
+                                    }
 
-                    if (data) {
-                        console.log('** ADD STAR MUTATION DATA **');
-                        console.log(data);
-                    }
-                    return (
-                        <Button onPress={() => addStar()} title={'Star'} />
-                    );
-                }
-                }
-            </Mutation>
-        ) :
-            (
-                <Mutation
-                    // @ts-ignore - mappings incorrect for Mutations
-                    mutation={RemoveRepositoryStarMutation}
-                    update={updateRemoveStar}
-                    variables={{ id: repository.id }}>
-                    {(removeStar, { loading, data, error }: { loading: boolean, data: any, error?: Error }) => {
-                        if (error) {
-                            return <FormValidationMessage>{error.message}</FormValidationMessage>;
-                        }
-                        if (loading) {
-                            return <BusyIndicator isBusy message='Star falling..' />;
-                        }
+                                    if (data) {
+                                        console.log('** REMOVE STAR MUTATION DATA **');
+                                        console.log(data);
+                                    }
 
-                        if (data) {
-                            console.log('** REMOVE STAR MUTATION DATA **');
-                            console.log(data);
-                        }
-
-                        return (
-                            <Button onPress={() => removeStar()} title={'Remove Star'} />
-                        );
+                                    return (
+                                        <Button onPress={() => removeStar()} title={'Remove Star'} />
+                                    );
+                                }
+                                }
+                            </Mutation>)
                     }
-                    }
-                </Mutation>)
-        }
-    </View>;
+                </View>
+            </View>
+        </View >);
+};
 
 export default RepositoryItem;
 
