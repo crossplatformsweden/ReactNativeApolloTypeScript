@@ -6,9 +6,7 @@ import { Query } from 'react-apollo';
 import { FormValidationMessage } from 'react-native-elements';
 import BusyIndicator from '../core/components/BusyIndicator';
 import GetOrganizationQuery from '../queries/GetOrganizationQuery';
-import { OrganizationVariables, OrganizationResponse } from '../Types';
-
-class OrganizationQuery extends Query<GetOrganizationQuery, OrganizationVariables> { }
+import { OrganizationVariables, OrganizationResponse, GenericResponse } from '../Types';
 
 /**
  * Queries for organization based on provided properties and returns an readonly view
@@ -22,8 +20,8 @@ class CompanyView extends React.Component<OrganizationVariables, OrganizationVar
 
     render() {
         return (
-            <OrganizationQuery query={GetOrganizationQuery} variables={this.props}>
-                {({ loading, data, error }: { loading: boolean, data: OrganizationResponse, error?: Error }) => {
+            <Query query={GetOrganizationQuery} variables={this.props}>
+                {({ loading, data, error }:  GenericResponse) => {
                     if (error) {
                         return <FormValidationMessage>{error.message}</FormValidationMessage>;
                     }
@@ -31,31 +29,33 @@ class CompanyView extends React.Component<OrganizationVariables, OrganizationVar
                         return <BusyIndicator isBusy message='Getting company...' />;
                     }
 
+                    const company = data as OrganizationResponse;
+
                     return (
                         <View style={[Theme.container, Theme.paddingDefault]}>
-                            {data && data.organization ? (
+                            {company && company.organization ? (
                                 <View style={Theme.container}>
-                                <Text style={Theme.title}>{data.organization.name}</Text>
+                                <Text style={Theme.title}>{company.organization.name}</Text>
                                     <Text style={Theme.label}>Url</Text>
                                     <Text style={Theme.link}
                                         onPress={() =>
-                                            Linking.openURL(data.organization.url)}>{data.organization.url}</Text>
-                                    {data.organization.repository ? (
+                                            Linking.openURL(company.organization.url)}>{company.organization.url}</Text>
+                                    {company.organization.repository ? (
                                         <View>
                                             // @ts-ignore
                                             <Text style={Theme.label}>Repository</Text>
-                                            <Text style={Theme.textBlock}>{data.organization.repository.name}</Text>
+                                            <Text style={Theme.textBlock}>{company.organization.repository.name}</Text>
                                             <Text style={Theme.link}
                                                 onPress={() =>
-                                                    Linking.openURL(data.organization.repository.url)}>
-                                                {data.organization.repository.url}</Text>
+                                                    Linking.openURL(company.organization.repository.url)}>
+                                                {company.organization.repository.url}</Text>
                                         </View>
                                     ) : null}
                                 </View>
                             ) : null}
                         </View>);
                 }}
-            </OrganizationQuery>
+            </Query>
         );
     }
 }

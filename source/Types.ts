@@ -72,7 +72,7 @@ export type RemoveStar = {
     removeStar: StarMutation;
 };
 
-export type AddOrRemoeStar =  AddStar | RemoveStar;
+export type AddOrRemoeStar = AddStar | RemoveStar;
 
 export type StarMutationData = {
     data: AddOrRemoeStar;
@@ -109,3 +109,28 @@ export type OrganizationVariables = {
 export type OrganizationResponse = {
     organization: Organization
 };
+
+export type SelectedRepositoryIdsResponse = {
+    selectedRepositoryIds: Array<string>;
+};
+
+export type ToggleSelectedRepositoryVariables = {
+    id: string;
+    isSelected: boolean;
+};
+
+/**
+ * Describes a generic GraphQL response where the data property is "any"
+ */
+export type GenericResponse = {
+    loading: boolean;
+    data?: any;
+    error?: Error;
+};
+
+/**
+ * Defines objects in application cache
+ */
+export interface IApplicationCache {
+    selectedRepositoryIds: Array<string>;
+}

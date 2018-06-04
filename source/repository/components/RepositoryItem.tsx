@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, Text, Linking, Button, Switch } from 'react-native';
 import { Mutation } from 'react-apollo';
-import { RepoNodeItem, StarMutationData, RemoveStar, AddStar } from '../../Types';
+import { RepoNodeItem, StarMutationData, RemoveStar, AddStar, GenericResponse } from '../../Types';
 import Theme from '../../Theme';
 import { FormValidationMessage } from 'react-native-elements';
 import BusyIndicator from '../../core/components/BusyIndicator';
@@ -9,13 +9,10 @@ import { CreateApolloClient } from '../../apollo/ApolloClientBase';
 import RepositoryFragment from '../../fragments/RepositoryFragment';
 import StarRepositoryMutation, { RemoveRepositoryStarMutation } from '../../mutations/StarRepositoryMutation';
 import _ from 'lodash';
+import SelectRepository from '../../mutations/SelectRepository';
 
 export interface IProps {
     repository: RepoNodeItem;
-    /**
-     * Toggle selection state of provided repository id
-     */
-    toggleSelectedRepository: (id: string, isSelected: boolean) => void;
     selectedRepositoryIds: Array<string>;
 }
 
@@ -63,13 +60,28 @@ const updateRemoveStar = (client: CreateApolloClient, data: StarMutationData) =>
     console.log('Updated cache');
 };
 
-const RepositoryItem = ({ repository, toggleSelectedRepository, selectedRepositoryIds }: IProps) => {
-    const isSelected = _.includes(selectedRepositoryIds, repository.id, 0);
+const RepositoryItem = ({ repository, selectedRepositoryIds }: IProps) => {
+    const isSelected = _.includes(selectedRepositoryIds, repository.id);
     return (
         <View style={Theme.para}>
             <View style={Theme.horizontalTopLeft}>
-                <Switch value={isSelected}
-                onValueChange={(val) => toggleSelectedRepository(repository.id, val)} />
+                <Mutation
+                    // @ts-ignore - mappings incorrect for Mutations
+                    mutation={SelectRepository}
+                    variables={{ id: repository.id, isSelected }}>
+                    {(toggleSelectRepository, { loading, error }: GenericResponse) => {
+                        if (error) {
+                            return <FormValidationMessage>{error.message}</FormValidationMessage>;
+                        }
+                        if (loading) {
+                            return <BusyIndicator isBusy message='One sec..' />;
+                        }
+
+                        return (<Switch
+                            value={isSelected}
+                            onValueChange={() => toggleSelectRepository()} />);
+                    }}
+                </Mutation>
                 <View style={Theme.verticalTopLeft}>
                     <Text style={Theme.title}>{repository.name}</Text>
                     <Text>{repository.stargazers.totalCount} Stars</Text>
@@ -84,7 +96,7 @@ const RepositoryItem = ({ repository, toggleSelectedRepository, selectedReposito
                             mutation={StarRepositoryMutation}
                             update={updateAddStar}
                             variables={{ id: repository.id }}>
-                            {(addStar, { loading, data, error }: { loading: boolean, data: StarMutationData, error?: Error }) => {
+                            {(addStar, { loading, data, error }: GenericResponse) => {
                                 if (error) {
                                     return <FormValidationMessage>{error.message}</FormValidationMessage>;
                                 }
@@ -109,7 +121,7 @@ const RepositoryItem = ({ repository, toggleSelectedRepository, selectedReposito
                                 mutation={RemoveRepositoryStarMutation}
                                 update={updateRemoveStar}
                                 variables={{ id: repository.id }}>
-                                {(removeStar, { loading, data, error }: { loading: boolean, data: any, error?: Error }) => {
+                                {(removeStar, { loading, data, error }: GenericResponse) => {
                                     if (error) {
                                         return <FormValidationMessage>{error.message}</FormValidationMessage>;
                                     }

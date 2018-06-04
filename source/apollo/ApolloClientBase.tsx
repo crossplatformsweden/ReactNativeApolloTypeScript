@@ -1,18 +1,22 @@
 import * as React from 'react';
-import ApolloClient from 'apollo-boost';
-import { ApolloProvider } from 'react-apollo';
 import { View } from 'react-native';
+import { ApolloClient } from 'apollo-client';
+import { HttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloProvider } from 'react-apollo';
+import { onError } from 'apollo-link-error';
+import { ApolloLink } from 'apollo-link';
+import { withClientState } from 'apollo-link-state';
+import * as Types from '../Types';
 import Theme from '../Theme';
+import GetSelectedRepositoryIds from '../queries/GetSelectedRepositoryIds';
 
-interface IErrorLink {
-    graphQLErrors?: any;
-    networkError?: Error;
-}
+const inMemoryCache = new InMemoryCache();
 
 /**
  * Global error handling. Allows sending GraphQL errors to for example Sentry insights
  */
-const errorLink = ({ graphQLErrors, networkError }: IErrorLink) => {
+const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (graphQLErrors) {
         console.log('** GRAPHQL ERROR **');
         console.log(graphQLErrors);
@@ -22,15 +26,57 @@ const errorLink = ({ graphQLErrors, networkError }: IErrorLink) => {
         console.log('** NETWORK ERROR **');
         console.log(networkError);
     }
+});
+
+const httpLink = (uri: string = 'https://api.github.com/graphql', token: string = null) => new HttpLink({
+    uri,
+    headers: {
+        // @ts-ignore
+        authorization: 'Bearer ' + token,
+    },
+});
+
+const initialState: Types.IApplicationCache = {
+    selectedRepositoryIds: new Array<string>('MDEwOlJlcG9zaXRvcnk4OTMzMDY1Mg=='),
 };
 
-const request = (token: string = null) => async (operation: any) => {
-    operation.setContext({
-        headers: {
-            authorization: 'Bearer ' + token,
-        },
-    });
+/**
+ * Mutation to update selected repository in cache
+ * @param _  Parent result from any other resolver (https://blog.graph.cool/graphql-server-basics-the-schema-ac5e2950214e#9d03)
+ * @param {ToggleSelectedRepositoryVariables} param1 {@link ToggleSelectedRepositoryVariables}
+ * @param {InMemoryCache} param2 {@link InMemoryCache}
+ */
+const toggleSelectRepository = (
+    _: any,
+    { id, isSelected }: Types.ToggleSelectedRepositoryVariables,
+    { cache }: { cache: InMemoryCache }
+): void => {
+    // Get current ids from cache
+    let {selectedRepositoryIds} = cache.readQuery({query: GetSelectedRepositoryIds});
+
+    // Add or remove the provided id
+    selectedRepositoryIds = isSelected
+    ? selectedRepositoryIds.filter((itemId: string) => itemId !== id)
+    : selectedRepositoryIds.concat(id);
+
+    // Update cache
+    cache.writeQuery({query: GetSelectedRepositoryIds, data: {selectedRepositoryIds}});
+
+    return null;
 };
+
+/**
+ * Local state manager for Apollo
+ */
+const stateLink = withClientState({
+    cache: inMemoryCache,
+    defaults: initialState,
+    resolvers: {
+        Mutation: {
+            toggleSelectRepository,
+        },
+    },
+});
 
 /**
  * Implementation of ApolloClient with link and cache
@@ -38,16 +84,16 @@ const request = (token: string = null) => async (operation: any) => {
  * @param token optional token. Required for GitHub
  */
 export const CreateApolloClient = (uri: string = 'https://api.github.com/graphql', token: string = null) => new ApolloClient({
-    uri,
-    onError: errorLink,
-    request: request(token),
+    link: ApolloLink.from([errorLink, stateLink, httpLink(uri, token)]),
+    cache: inMemoryCache,
 });
 
 /**
  * Mock to get proper typing
  */
 const ApolloClientMock = new ApolloClient({
-    uri: '',
+    link: ApolloLink.from([]),
+    cache: inMemoryCache,
 });
 
 export type CreateApolloClient = typeof ApolloClientMock;
