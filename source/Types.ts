@@ -117,6 +117,7 @@ export type SelectedRepositoryIdsResponse = {
 export type ToggleSelectedRepositoryVariables = {
     id: string;
     isSelected: boolean;
+    __typename: string;
 };
 
 /**

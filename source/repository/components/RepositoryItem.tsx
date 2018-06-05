@@ -69,7 +69,7 @@ const RepositoryItem = ({ repository, selectedRepositoryIds }: IProps) => {
                     // @ts-ignore - mappings incorrect for Mutations
                     mutation={SelectRepository}
                     variables={{ id: repository.id, isSelected }}>
-                    {(toggleSelectRepository, { loading, error }: GenericResponse) => {
+                    {(ToggleSelectRepository, { loading, error }: GenericResponse) => {
                         if (error) {
                             return <FormValidationMessage>{error.message}</FormValidationMessage>;
                         }
@@ -79,7 +79,7 @@ const RepositoryItem = ({ repository, selectedRepositoryIds }: IProps) => {
 
                         return (<Switch
                             value={isSelected}
-                            onValueChange={() => toggleSelectRepository()} />);
+                            onValueChange={() => ToggleSelectRepository()} />);
                     }}
                 </Mutation>
                 <View style={Theme.verticalTopLeft}>

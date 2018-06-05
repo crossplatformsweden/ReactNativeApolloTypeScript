@@ -9,7 +9,7 @@ import { ApolloLink } from 'apollo-link';
 import { withClientState } from 'apollo-link-state';
 import * as Types from '../Types';
 import Theme from '../Theme';
-import GetSelectedRepositoryIds from '../queries/GetSelectedRepositoryIds';
+import ToggleSelectRepository from '../resolvers/ToggleSelectRepository';
 
 const inMemoryCache = new InMemoryCache();
 
@@ -41,31 +41,6 @@ const initialState: Types.IApplicationCache = {
 };
 
 /**
- * Mutation to update selected repository in cache
- * @param _  Parent result from any other resolver (https://blog.graph.cool/graphql-server-basics-the-schema-ac5e2950214e#9d03)
- * @param {ToggleSelectedRepositoryVariables} param1 {@link ToggleSelectedRepositoryVariables}
- * @param {InMemoryCache} param2 {@link InMemoryCache}
- */
-const toggleSelectRepository = (
-    _: any,
-    { id, isSelected }: Types.ToggleSelectedRepositoryVariables,
-    { cache }: { cache: InMemoryCache }
-): void => {
-    // Get current ids from cache
-    let {selectedRepositoryIds} = cache.readQuery({query: GetSelectedRepositoryIds});
-
-    // Add or remove the provided id
-    selectedRepositoryIds = isSelected
-    ? selectedRepositoryIds.filter((itemId: string) => itemId !== id)
-    : selectedRepositoryIds.concat(id);
-
-    // Update cache
-    cache.writeQuery({query: GetSelectedRepositoryIds, data: {selectedRepositoryIds}});
-
-    return null;
-};
-
-/**
  * Local state manager for Apollo
  */
 const stateLink = withClientState({
@@ -73,7 +48,7 @@ const stateLink = withClientState({
     defaults: initialState,
     resolvers: {
         Mutation: {
-            toggleSelectRepository,
+            ToggleSelectRepository,
         },
     },
 });
