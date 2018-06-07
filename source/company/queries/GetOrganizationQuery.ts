@@ -1,4 +1,6 @@
 import gql from 'graphql-tag';
+import { OrganizationResponse, OrganizationVariables } from '../../Types';
+import { Query } from 'react-apollo';
 
 /**
  * GraphQL query to get organizations.
@@ -17,6 +19,11 @@ query GetOrganization($organization: String!, $repository: String!) {
   }
 }
 `;
+
+/**
+ * Typed Query component
+ */
+export class GetOrganizationComponent extends Query<OrganizationResponse, OrganizationVariables> {}
 
 type GetOrganizationQuery = typeof GetOrganizationQuery;
 

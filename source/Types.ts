@@ -21,24 +21,24 @@ export enum NavigationConstants {
     PROFILE = 'ProfileScreen',
 }
 
-export type RepoEdge = {
+export interface RepoEdge {
     edges: Array<RepoNode>;
-};
+}
 
-export type Language = {
+export interface Language {
     name: string;
-};
+}
 
-export type Owner = {
+export interface Owner {
     login: string;
     url: string;
-};
+}
 
-export type UserCount = {
-    totalCount: number
-};
+export interface UserCount {
+    totalCount: number;
+}
 
-export type RepoNodeItem = {
+export interface RepoNodeItem {
     id: string;
     name: string;
     url: string;
@@ -48,86 +48,89 @@ export type RepoNodeItem = {
     stargazers: UserCount;
     viewerHasStarred: boolean;
     watchers: UserCount;
-    viewerSubscription: string
-};
+    viewerSubscription: string;
+}
 
-export type RepoNode = {
+export interface RepoNode {
     node: RepoNodeItem;
-};
+}
 
-export type Starrable = {
+export interface Starrable {
     id: string;
     viewerHasStarred: boolean;
-};
+}
 
-export type StarMutation = {
+export interface StarMutation {
     starrable: Starrable;
-};
+}
 
-export type AddStar = {
+export interface AddStar {
     addStar: StarMutation;
-};
+}
 
-export type RemoveStar = {
+export interface RemoveStar {
     removeStar: StarMutation;
-};
+}
 
 export type AddOrRemoeStar = AddStar | RemoveStar;
 
-export type StarMutationData = {
+export interface StarMutationData {
     data: AddOrRemoeStar;
-};
+}
 
-export type Viewer = {
+export interface Viewer {
     login: string;
     name: string;
     url: string;
     bio?: string;
     company?: any;
-    repositories?: RepoEdge
-};
+    repositories?: RepoEdge;
+}
 
-export type ViewerResponse = {
+export interface ViewerResponse {
     viewer?: Viewer;
-};
+}
 
-export type Repository = {
-    name: string,
-    url: string
-};
+export interface Repository {
+    name: string;
+    url: string;
+}
 
-export type Organization = {
-    name: string,
-    url: string,
-    repository?: Repository
-};
+export interface Organization {
+    name: string;
+    url: string;
+    repository?: Repository;
+}
 
-export type OrganizationVariables = {
-    organization: string, repository?: string
-};
+export interface OrganizationVariables {
+    organization: string; repository?: string;
+}
 
-export type OrganizationResponse = {
-    organization: Organization
-};
+export interface OrganizationResponse {
+    organization: Organization;
+}
 
-export type SelectedRepositoryIdsResponse = {
+export interface SelectedRepositoryIdsResponse {
     selectedRepositoryIds: Array<string>;
-};
+}
 
-export type ToggleSelectedRepositoryVariables = {
+export interface ToggleSelectedRepositoryVariables {
     id: string;
     isSelected: boolean;
+}
+
+export interface ToggleSelectedRepositoryResponse extends ToggleSelectedRepositoryVariables {
     __typename: string;
-};
+}
 
 /**
  * Describes a generic GraphQL response where the data property is "any"
  */
-export type GenericResponse = {
+export interface GenericResponse {
     loading: boolean;
     data?: any;
     error?: Error;
-};
+}
 
 /**
  * Defines objects in application cache

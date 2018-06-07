@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Text, View, Linking } from 'react-native';
 import 'cross-fetch/polyfill';
 import Theme from '../../Theme';
-import { Query } from 'react-apollo';
 import { FormValidationMessage } from 'react-native-elements';
 import BusyIndicator from '../../core/components/BusyIndicator';
 import GetOrganizationQuery from '../queries/GetOrganizationQuery';
@@ -20,7 +19,7 @@ class CompanyView extends React.Component<OrganizationVariables, OrganizationVar
 
     render() {
         return (
-            <Query query={GetOrganizationQuery} variables={this.props}>
+            <GetOrganizationQuery query={GetOrganizationQuery} variables={this.props}>
                 {({ loading, data, error }:  GenericResponse) => {
                     if (error) {
                         return <FormValidationMessage>{error.message}</FormValidationMessage>;
@@ -55,7 +54,7 @@ class CompanyView extends React.Component<OrganizationVariables, OrganizationVar
                             ) : null}
                         </View>);
                 }}
-            </Query>
+            </GetOrganizationQuery>
         );
     }
 }

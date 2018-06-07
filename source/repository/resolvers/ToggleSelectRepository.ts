@@ -25,7 +25,7 @@ const ToggleSelectRepository = (
     // Update cache
     cache.writeQuery({query: GetSelectedRepositoryIds, data: {selectedRepositoryIds}});
 
-    const result: Types.ToggleSelectedRepositoryVariables = {
+    const result: Types.ToggleSelectedRepositoryResponse = {
         id,
         isSelected: !isSelected,
         __typename: id,

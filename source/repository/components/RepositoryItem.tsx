@@ -9,7 +9,7 @@ import { CreateApolloClient } from '../../apollo/ApolloClientBase';
 import RepositoryFragment from '../fragments/RepositoryFragment';
 import StarRepositoryMutation, { RemoveRepositoryStarMutation } from '../mutations/StarRepositoryMutation';
 import _ from 'lodash';
-import SelectRepository from '../mutations/SelectRepository';
+import SelectRepository, { SelectRepositoryComponent } from '../mutations/SelectRepository';
 
 export interface IProps {
     repository: RepoNodeItem;
@@ -65,8 +65,7 @@ const RepositoryItem = ({ repository, selectedRepositoryIds }: IProps) => {
     return (
         <View style={Theme.para}>
             <View style={Theme.horizontalTopLeft}>
-                <Mutation
-                    // @ts-ignore - mappings incorrect for Mutations
+                <SelectRepositoryComponent
                     mutation={SelectRepository}
                     variables={{ id: repository.id, isSelected }}>
                     {(ToggleSelectRepository, { loading, error }: GenericResponse) => {
@@ -81,7 +80,7 @@ const RepositoryItem = ({ repository, selectedRepositoryIds }: IProps) => {
                             value={isSelected}
                             onValueChange={() => ToggleSelectRepository()} />);
                     }}
-                </Mutation>
+                </SelectRepositoryComponent>
                 <View style={Theme.verticalTopLeft}>
                     <Text style={Theme.title}>{repository.name}</Text>
                     <Text>{repository.stargazers.totalCount} Stars</Text>
