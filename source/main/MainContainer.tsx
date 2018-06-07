@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Text, View, Linking } from 'react-native';
 import Theme from '../Theme';
-import CompanySearch from '../company/CompanySearch';
+import CompanySearch from '../company/components/CompanySearch';
 
 const url = 'https://www.robinwieruch.de/react-graphql-apollo-tutorial/';
 

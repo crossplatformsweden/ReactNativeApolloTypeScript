@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Text, View, Linking } from 'react-native';
 import 'cross-fetch/polyfill';
-import Theme from '../Theme';
+import Theme from '../../Theme';
 import { Query } from 'react-apollo';
 import { FormValidationMessage } from 'react-native-elements';
-import BusyIndicator from '../core/components/BusyIndicator';
+import BusyIndicator from '../../core/components/BusyIndicator';
 import GetOrganizationQuery from '../queries/GetOrganizationQuery';
-import { OrganizationVariables, OrganizationResponse, GenericResponse } from '../Types';
+import { OrganizationVariables, OrganizationResponse, GenericResponse } from '../../Types';
 
 /**
  * Queries for organization based on provided properties and returns an readonly view

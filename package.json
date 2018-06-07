@@ -60,7 +60,9 @@
     "start": "react-native-scripts start",
     "eject": "react-native-scripts eject",
     "android": "react-native-scripts android",
-    "ios": "react-native-scripts ios"
+    "android-exp": "exp start --tunnel --dev -a",
+    "ios": "react-native-scripts ios",
+    "ios-exp": "exp start --tunnel --dev -ios"
   },
   "dependencies": {
     "@playlyfe/gql": "^2.6.0",

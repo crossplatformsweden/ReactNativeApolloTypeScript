@@ -6,7 +6,7 @@ import { FormValidationMessage } from 'react-native-elements';
 import BusyIndicator from '../../core/components/BusyIndicator';
 import * as types from '../../Types';
 import RepositoryList from '../../repository/components/RepositoryList';
-import GetUserQuery from '../../queries/GetUserQuery';
+import GetUserQuery from '../queries/GetUserQuery';
 
 const ProfileComponent = () => (
     <Query query={GetUserQuery}>

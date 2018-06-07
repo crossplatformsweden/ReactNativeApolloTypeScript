@@ -3,7 +3,7 @@ import { Text, ScrollView } from 'react-native';
 import { RepoEdge, RepoNodeItem, SelectedRepositoryIdsResponse } from '../../Types';
 import RepositoryItem from './RepositoryItem';
 import { Query } from 'react-apollo';
-import GetSelectedRepositoryIds from '../../queries/GetSelectedRepositoryIds';
+import GetSelectedRepositoryIds from '../queries/GetSelectedRepositoryIds';
 
 export interface IProps {
     repositories: RepoEdge;

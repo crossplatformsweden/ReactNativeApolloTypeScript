@@ -98,6 +98,16 @@ Upgrading to a new version of React Native requires updating the `react-native`,
 
 If Yarn was installed when the project was initialized, then dependencies will have been installed via Yarn, and you should probably use it to run these commands as well. Unlike dependency installation, command running syntax is identical for Yarn and NPM at the time of this writing.
 
+### Global Exp CLI
+If you have globally installed `exp` (which you should as an Expo developer), you can use these commands.
+They have proven to work better than React-Native's wrapper of Expo.
+
+#### `npm run android-exp`
+Start Android with global `exp` CLI, Tunnel mode.
+
+#### `npm run ios-exp`
+Start iOS with global `exp` CLI, Tunnel mode.
+
 ### `npm start`
 
 Runs your app in development mode.

@@ -6,10 +6,10 @@ import Theme from '../../Theme';
 import { FormValidationMessage } from 'react-native-elements';
 import BusyIndicator from '../../core/components/BusyIndicator';
 import { CreateApolloClient } from '../../apollo/ApolloClientBase';
-import RepositoryFragment from '../../fragments/RepositoryFragment';
-import StarRepositoryMutation, { RemoveRepositoryStarMutation } from '../../mutations/StarRepositoryMutation';
+import RepositoryFragment from '../fragments/RepositoryFragment';
+import StarRepositoryMutation, { RemoveRepositoryStarMutation } from '../mutations/StarRepositoryMutation';
 import _ from 'lodash';
-import SelectRepository from '../../mutations/SelectRepository';
+import SelectRepository from '../mutations/SelectRepository';
 
 export interface IProps {
     repository: RepoNodeItem;

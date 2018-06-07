@@ -1,4 +1,4 @@
-import RepositoryFragment from '../fragments/RepositoryFragment';
+import RepositoryFragment from '../../repository/fragments/RepositoryFragment';
 import gql from 'graphql-tag';
 
 /**

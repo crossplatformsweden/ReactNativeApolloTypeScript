@@ -1,6 +1,6 @@
 
 import GetSelectedRepositoryIds from '../queries/GetSelectedRepositoryIds';
-import * as Types from '../Types';
+import * as Types from '../../Types';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 
 /**

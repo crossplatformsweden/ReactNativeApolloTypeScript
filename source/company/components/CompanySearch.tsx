@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Text, View, TextInput, Button } from 'react-native';
 import 'cross-fetch/polyfill';
-import Theme from '../Theme';
+import Theme from '../../Theme';
 import CompanyView from './CompanyView';
 
 interface IState {

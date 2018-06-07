@@ -9,7 +9,7 @@ import { ApolloLink } from 'apollo-link';
 import { withClientState } from 'apollo-link-state';
 import * as Types from '../Types';
 import Theme from '../Theme';
-import ToggleSelectRepository from '../resolvers/ToggleSelectRepository';
+import ToggleSelectRepository from '../repository/resolvers/ToggleSelectRepository';
 
 const inMemoryCache = new InMemoryCache();
 
