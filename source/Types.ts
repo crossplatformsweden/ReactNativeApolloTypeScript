@@ -138,3 +138,50 @@ export interface GenericResponse {
 export interface IApplicationCache {
     selectedRepositoryIds: Array<string>;
 }
+
+/**
+ * GraphQL type definitions
+ */
+export const GraphQLDefinitions = `
+type Query {
+    organization(login: String!): Organization!
+  }
+
+  interface Starrable {
+    id: ID!
+    viewerHasStarred: Boolean!
+  }
+
+  type Organization {
+    name: String!
+    url: String!
+    repositories: RepositoryConnection!
+  }
+
+  type RepositoryConnection {
+    edges: [RepositoryEdge!]!
+  }
+
+  type RepositoryEdge {
+    node: Repository!
+  }
+
+  type Repository implements Starrable {
+    id: ID!
+    name: String!
+    url: String!
+    viewerHasStarred: Boolean!
+  }
+
+  type Mutation {
+    addStar(input: AddStarInput!): AddStarPayload!
+  }
+
+  input AddStarInput {
+    starrableId: ID!
+  }
+
+  type AddStarPayload {
+    starrable: Starrable!
+  }
+`;

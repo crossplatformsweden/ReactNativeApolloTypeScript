@@ -4,7 +4,7 @@ import gql from 'graphql-tag';
  * Selects fields from the Repository node as a fragment called "repository" which can then be referenced in queries
  * @example
  * ```
- * import RepositoryFragment from '../../fragments/RepositoryFragment';
+ * import RepositoryFragment from '/repository/fragments/RepositoryFragment';
  * const userQuery = gql`
  *   {
  *     viewer {

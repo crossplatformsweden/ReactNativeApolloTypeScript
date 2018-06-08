@@ -8,7 +8,32 @@ import * as types from '../../Types';
 import RepositoryList from '../../repository/components/RepositoryList';
 import GetUserQuery from '../queries/GetUserQuery';
 
-const ProfileComponent = () => (
+/**
+ * Profile page pure React component
+ * @typedef ProfilePure
+ * @param data {@see ViewerResponse} resulting data from query
+ */
+export const ProfilePure = ({viewer}: types.ViewerResponse) =>
+    (<View style={[Theme.container, Theme.paddingDefault]}>
+        <Text style={Theme.title}>User</Text>
+        <Text style={Theme.textBlock}>{viewer.name}</Text>
+        <Text style={Theme.title}>Company</Text>
+        <Text style={Theme.textBlock}>{viewer.company}</Text>
+        <Text style={Theme.title}>Bio</Text>
+        <Text style={Theme.textBlock}>{viewer.bio}</Text>
+        <Text style={Theme.title}>Repositories</Text>
+        <View style={[Theme.container, Theme.paddingDefault]}>
+            <RepositoryList repositories={viewer.repositories} />
+        </View>
+    </View>);
+
+/**
+ * GraphQL Profile component querying user in GitHub API
+ *
+ * @typedef ProfileComponent
+ * Wraps {@see ProfilePure}
+ */
+export const ProfileComponent = () => (
     <Query query={GetUserQuery}>
         {({ loading, data, error }: { loading: boolean, data: types.ViewerResponse, error?: Error }) => {
             if (error) {
@@ -23,19 +48,8 @@ const ProfileComponent = () => (
             }
 
             return (
-                <View style={[Theme.container, Theme.paddingDefault]}>
-                    <Text style={Theme.title}>User</Text>
-                    <Text style={Theme.textBlock}>{data.viewer.name}</Text>
-                    <Text style={Theme.title}>Company</Text>
-                    <Text style={Theme.textBlock}>{data.viewer.company}</Text>
-                    <Text style={Theme.title}>Bio</Text>
-                    <Text style={Theme.textBlock}>{data.viewer.bio}</Text>
-                    <Text style={Theme.title}>Repositories</Text>
-                    <View style={[Theme.container, Theme.paddingDefault]}>
-                        <RepositoryList repositories={data.viewer.repositories} />
-                    </View>
-                </View>
-                );
+                <ProfilePure {...data} />
+            );
         }
         }
     </Query>
